@@ -17,6 +17,12 @@ const employeesSchema = new Schema(
         require: true,
         maxLength: 100,
     },
+    email: {
+      type: String,
+      require: true,
+      maxLength: 100,
+      unique: true,
+  },
     telephone: {
         type: String,
         require: true,

@@ -24,10 +24,11 @@ const clientsSchema = new Schema(
         minLength: 6,
         maxLength: 100,
       },
-    user: {
+    email: {
         type: String,
         require: true,
         maxLength: 100,
+        unique: true,
     }, 
   },
   {
