@@ -9,8 +9,8 @@ clientsController.getClients = async (req, res) => {
 
 // I N S E R T
 clientsController.insertClients = async (req, res) => {
-  const { name, lastName, telephone, password, email } = req.body;
-  const newClient = new clientsModel({name, lastName, telephone, password, email});
+  const { name, lastName, telephone, password, email, isVerified} = req.body;
+  const newClient = new clientsModel({name, lastName, telephone, password, email, isVerified});
   await newClient.save();
   res.json({ message: "client saved" });
 };
@@ -23,7 +23,7 @@ clientsController.deleteClients = async (req, res) => {
 
 // U P D A T E
 clientsController.updateClients = async (req, res) => {
-  const { name, lastName, telephone, password, email } = req.body;
+  const { name, lastName, telephone, password, email, isVerified} = req.body;
   const updateClient = await clientsModel.findByIdAndUpdate(
     req.params.id,
     {name, lastName, telephone, password, email },

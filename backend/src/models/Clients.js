@@ -30,6 +30,10 @@ const clientsSchema = new Schema(
         maxLength: 100,
         unique: true,
     }, 
+    isVerified:{
+      type: Boolean,
+      require: true,
+  },
   },
   {
     timestamps: true,
