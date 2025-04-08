@@ -1,7 +1,7 @@
 import React from 'react';
 import './LoginPage.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import logoImage from './img/LOGO.png';
+import logoImage from '../../img/LOGO.png';
 
 const LoginPage = () => {
   return (
@@ -46,7 +46,7 @@ const LoginPage = () => {
               <a href="#">¿Olvidaste tu contraseña?</a>
             </div>
             <div className="form-link right-align">
-              <a href="#">¿Aún no tienes cuenta?</a>
+              <a href="/register">¿Aún no tienes cuenta?</a>
             </div>
           </div>
           

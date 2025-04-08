@@ -1,11 +1,23 @@
-*{
+* {
     background-color: #242424;
-}
-.login-container {
+    box-sizing: border-box;
+  }
+  
+  body, html {
+    height: 100%;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: #242424;
+  }
+  
+  .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    width: 100%;
     background-color: #242424;
     font-family: Arial, sans-serif;
   }
@@ -17,6 +29,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  
+  /* Hacemos un poco más grande el contenedor para el registro */
+  .register-content {
+    width: 520px;
   }
   
   .logo-container {
@@ -33,7 +50,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Puedes eliminar o ajustar esto según tu logo */
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     margin-bottom: 15px;
@@ -128,6 +144,17 @@
     width: 100%;
   }
   
+  /* Añadimos estilo para los campos divididos (nombre y apellido) */
+  .form-row {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+  }
+  
+  .form-group.half {
+    width: 50%;
+  }
+  
   .form-group input {
     width: 100%;
     padding: 16px 18px;
@@ -151,7 +178,7 @@
   
   .form-actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     font-size: 0.9rem;
     margin: 8px 0;
     width: 100%;
@@ -168,7 +195,7 @@
   }
   
   .right-align {
-    text-align: right;
+    text-align: center;
   }
   
   .login-btn {
@@ -189,18 +216,32 @@
     background-color: #e64a19;
   }
   
-  /* Estilos específicos para desktop */
   @media (min-width: 768px) {
     .login-content {
       padding: 40px;
     }
-    
+  
     .form-group input {
       font-size: 16px;
       padding: 16px 18px;
     }
-    
+  
     .login-btn {
       padding: 16px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .form-row {
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .form-group.half {
+      width: 100%;
+    }
+    
+    .register-content {
+      width: 90%;
     }
   }
