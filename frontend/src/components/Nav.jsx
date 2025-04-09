@@ -99,7 +99,7 @@ const Nav = () => {
       </div>
 
       {/* Platform Navigation */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 16px 12px 16px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 16px 1px 16px" }}>
         <ul style={{ display: "flex", gap: "24px", listStyle: "none", padding: 0, margin: 0 }}>
           <li>
             <a href="/" style={{ color: "white", textDecoration: "none" }}>PC</a>

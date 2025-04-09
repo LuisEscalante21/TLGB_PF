@@ -1,22 +1,25 @@
 import React from "react";
-import "../SobreNosotros/NosotrosPage.css"; 
+import "../SobreNosotros/NosotrosPage.css";
+import imgBri from "../../img/brizuela.png";
+import imgGerar from "../../img/gerardo.png";
+import imgLuisin from "../../img/luis.png";
 
 const AboutUs = () => {
   const teamMembers = [
     {
       name: "Daniel Oswaldo Brizuela Aquino",
       role: "Fundador & CEO",
-      image: "/api/placeholder/100/100" 
+      image: imgBri
     },
     {
       name: "Luis Ernesto Escalante Calderon",
       role: "Director de Operaciones",
-      image: "/api/placeholder/100/100" 
+      image: imgLuisin
     },
     {
       name: "Gerardo Steven Quintanilla Lopez",
       role: "Jefe de Soporte Técnico",
-      image: "/api/placeholder/100/100" 
+      image: imgGerar
     }
   ];
 
