@@ -1,0 +1,119 @@
+.console-menu {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+}
+
+.console-contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.5rem 3rem;
+    background-color: #3C3C3C;
+    border-radius: 50px;
+    width: fit-content;
+    min-width: 200px;
+    margin: 0 auto;
+    list-style: none;
+}
+
+.menu-list {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 30px;
+    background-color: #3C3C3C;
+}
+
+
+.nav-console-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 1.2rem;
+    padding: 8px 16px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    background-color: transparent;
+}
+
+/* Estilos hover para cada plataforma */
+.select-pc .nav-console-link:hover {
+    background-color: #5500FF;
+    color: #FFFFFF;
+    padding: 15px 36px;
+}
+
+
+.select-playstation .nav-console-link:hover {
+    background-color: #0970D8;
+    color: #FFFFFF;
+    padding: 15px 36px;
+}
+
+.select-xbox .nav-console-link:hover {
+    background-color: #107C10;
+    color: #FFFFFF;
+    padding: 15px 36px;
+}
+
+.select-nintendo .nav-console-link:hover {
+    background-color: #D90429;
+    color: #FFFFFF;
+    padding: 15px 36px;
+}
+
+.active-pc{
+    background-color: #5500FF;
+    color: #FFFFFF;
+    padding: 15px 36px;
+}
+
+.active-ps{
+    background-color: #0970D8;
+    color: #FFFFFF;
+    padding: 15px 36px;
+}
+
+.active-xbox{
+    background-color: #107C10;
+    color: #FFFFFF;
+    padding: 15px 36px;
+}
+
+.active-nintendo{
+    background-color: #D90429;
+    color: #FFFFFF;
+    padding: 15px 36px;
+}
+
+/* Estilo para enlace activo */
+.nav-console-link.active {
+    font-weight: bold;
+    /* Puedes agregar estilos específicos para el enlace activo si lo deseas */
+}
+
+
+
+/* Versión responsive */
+@media (max-width: 768px) {
+    .console-contenedor {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.5rem 1rem;
+        min-width: 90%;
+    }
+    
+    .nav-console-link {
+        padding: 8px 12px;
+    }
+    
+    .menu-list .nav-console-link:hover {
+        padding: 12px 24px;
+    }
+}

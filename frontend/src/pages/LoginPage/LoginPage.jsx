@@ -1,28 +1,104 @@
-import React from 'react';
+import React, { useState } from "react";
+import { Global } from "../../helpers/Global";
+import Swal from "sweetalert2";
+import useAuth from "../../hooks/useAuth";
 import './LoginPage.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import logoImage from '../../img/LOGO.png';
+import { useForm } from "../../hooks/useForm";
+import { useNavigate } from "react-router-dom";
 
-const LoginPage = () => {
+export const LoginPage = () => {
+  const { form, changed } = useForm({});
+  const [saved, setSaved] = useState("not_sended");
+  const { setAuth } = useAuth();
+
+  const navigate = useNavigate();
+
+  const loginUser = async (e) => {
+    e.preventDefault();
+
+    let userToLogin = form;
+
+    try {
+      const request = await fetch(Global.url + "login", {
+        method: "POST",
+        body: JSON.stringify(userToLogin),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include' // Necesario para cookies
+      });
+
+      const data = await request.json();
+
+      console.log(data);
+      console.log(data.user);
+
+        if (data.status === "success") {
+          setSaved("login");
+          //setAuth(userData.user);
+
+          setAuth({
+            userId: data.user.userId,
+            userType: data.user.userType,
+            email: data.user.email
+          });
+          
+          Swal.fire({
+            title: "¡Inicio de Sesión exitoso!",
+            text: "Serás redirigido en breve",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+          }).then(() => {
+            navigate("/"); // o solo "/" si querés ir al inicio
+          });
+        
+         
+      } else {
+        setSaved("error");
+        Swal.fire({
+          title: "Error",
+          text: data.message || "Credenciales incorrectas",
+          icon: "error",
+          confirmButtonText: "Aceptar",
+        });
+      }
+    } catch (error) {
+      setSaved("error");
+      console.error("Login error:", error);
+      
+      let errorMessage = "Ocurrió un error al intentar iniciar sesión";
+      if (error.message.includes("Failed to fetch")) {
+        errorMessage = "No se pudo conectar con el servidor";
+      }
+
+      Swal.fire({
+        title: "Error",
+        text: errorMessage,
+        icon: "error",
+        confirmButtonText: "Aceptar",
+      });
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-content">
         <div className="logo-container">
-          {/* Espacio para colocar tu propio logo/imagen */}
           <div className="custom-logo">
-          <img src={logoImage} alt="TLGB Logo" />
+            <img src={logoImage} alt="TLGB Logo" />
           </div>
         </div>
         <h2 className="login-title">Inicia sesión</h2>
         
         <div className="social-login">
-          <button className="social-btn facebook">
+          <button type="button" className="social-btn facebook">
             <i className="fab fa-facebook-f"></i>
           </button>
-          <button className="social-btn google">
+          <button type="button" className="social-btn google">
             <i className="fab fa-google"></i>
           </button>
-          <button className="social-btn apple">
+          <button type="button" className="social-btn apple">
             <i className="fab fa-apple"></i>
           </button>
         </div>
@@ -33,12 +109,24 @@ const LoginPage = () => {
           <span className="divider-line"></span>
         </div>
         
-        <form className="login-form">
+        <form className="login-form" onSubmit={loginUser}>
           <div className="form-group">
-            <input type="email" id="email" placeholder="Email" required />
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="Email"
+              onChange={changed} 
+              required 
+            />
           </div>
           <div className="form-group">
-            <input type="password" id="password" placeholder="Contraseña" required />
+            <input 
+              type="password" 
+              name="password" 
+              placeholder="Contraseña"
+              onChange={changed} 
+              required 
+            />
           </div>
           
           <div className="form-actions">

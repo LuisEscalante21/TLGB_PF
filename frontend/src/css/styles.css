@@ -1,0 +1,621 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style: none;
+}
+
+html, body {
+  height: auto; /* ❗ MUY IMPORTANTE */
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+
+html {
+  width: 100%;
+  height: 100%;
+  font-size: 10px;
+}
+
+
+body {
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: var(--color-general-text);
+}
+
+.nav-container {
+  background-color: #000;
+  color: white;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  
+}
+
+.nav-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+}
+
+.nav-logo-container {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  overflow: hidden;
+}
+
+.nav-logo {
+  height: 150px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #E85D04;
+}
+
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-icon {
+  color: white;
+  cursor: pointer;
+}
+
+.fixed-header-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: #000; /* Fondo para el header */
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: 180px; /* Ajusta según la altura de tu header */
+  padding-bottom: 70px;
+  width: 100%;
+  max-width: 1200px; /* Ancho máximo del contenido */
+  margin: 0 auto; /* Centrado horizontal */
+}
+
+
+/* Opcional: si usas tarjetas de juegos */
+.cards-platform-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centra las tarjetas horizontalmente */
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.layout{
+  display: grid;
+  grid-template-areas: 
+      "nav nav " 
+      "content aside";
+  grid-template-rows: 60px auto auto;
+  grid-template-columns: 70% 30%;
+  width: 100%;
+  min-height: 100vh; /* ocupa al menos la pantalla completa */
+  height: auto;
+      
+}
+
+.layout__content {
+  grid-area: content;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  text-align: center;  
+}
+
+.console-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* Centra horizontalmente */
+  justify-content: center;  /* Opcional, por si querés centrar verticalmente también */
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.platform-selection {
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 200px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+
+.platform-selection:hover {
+  transform: scale(1.05);
+}
+
+.game-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.game-card {
+  background-color: #3C3C3C;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 200px;
+  color: white;
+  transition: transform 0.3s;
+}
+
+.information-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.tarjeta-seccion {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tarjeta-titulo {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+.tarjeta-contenedor {
+  width: 100%;
+  overflow: hidden; /* Ya no necesitamos scroll horizontal */
+  padding-bottom: 20px;
+}
+
+.tarjeta-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+/* Estilos de cada tarjeta */
+.tarjeta-card {
+  width: calc((100% - 40px) / 3); /* 100% menos los gaps dividido 3 */
+  min-width: 300px;
+  height: 150px;
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.tarjeta-card:hover {
+  transform: translateY(-5px);
+}
+
+.tarjeta-imagen-contenedor {
+  width: 120px;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tarjeta-imagen {
+  width: 100%;
+  height: 60%;
+  object-fit: cover;
+}
+
+.tarjeta-imagen-placeholder {
+  padding: 10px;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+}
+
+.tarjeta-info {
+  flex: 1;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tarjeta-nombre {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+
+.tarjeta-precio {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.tarjeta-cargando {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #666;
+  padding: 40px;
+}
+
+/* Scrollbar personalizada para el contenedor horizontal */
+.tarjeta-contenedor::-webkit-scrollbar {
+  height: 8px;
+}
+
+.tarjeta-contenedor::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.tarjeta-contenedor::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.tarjeta-contenedor::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.footer-container {
+  background-color: #000;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  color: #333;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
+
+
+.footer-container div {
+  background-color: #000;
+
+  color: #333;
+}
+
+.footer-top {
+  margin-bottom: 1.5rem;
+}
+
+.trustpilot-section h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.trustpilot-section p {
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.links-column {
+  flex: 1;
+}
+
+.links-column h3, 
+.links-column h4, 
+.links-column h5, 
+.links-column h6 {
+  margin: 0.5rem 0;
+  font-weight: normal;
+}
+
+.links-column h3 {
+  font-size: 1.2rem;
+}
+
+.links-column h4 {
+  font-size: 1.1rem;
+}
+
+.links-column h5 {
+  font-size: 1rem;
+}
+
+.links-column h6 {
+  font-size: 0.9rem;
+}
+
+.links-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.links-column li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.footer-bottom hr {
+  border: 0;
+  height: 1px;
+  background-color: #ddd;
+  margin-bottom: 1rem;
+}
+
+.footer-bottom p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.container{
+  display: flex;
+}
+
+.copyright{
+  width: 50px;
+  flex-direction: row;
+}
+
+.footer {
+  background-color: black;
+  color: #d1d5db;
+  padding: 2rem 1rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.top-section, .bottom-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+@media(min-width: 768px) {
+  .top-section, .bottom-section {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.trustpilot {
+  text-align: center;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trustpilot-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: white;
+  margin-right: 0.5rem;
+}
+
+.rating-box {
+  background-color: #111827;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+}
+
+.rating-value {
+  margin-left: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+}
+
+.star {
+  color: #facc15;
+  margin-right: 0.2rem;
+}
+
+.reviews-text {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media(min-width: 640px) {
+  .action-buttons {
+    flex-direction: row;
+  }
+}
+
+.discord-button, .gift-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s;
+  font-weight: 500;
+}
+
+.discord-button {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.discord-button:hover {
+  background-color: #4338ca;
+}
+
+.gift-button {
+  border: 1px solid #4f46e5;
+  color: #818cf8;
+}
+
+.gift-button:hover {
+  background-color: #111827;
+}
+
+.button-icon {
+  margin-right: 0.5rem;
+}
+
+.separator {
+  border-bottom: 1px solid #374151;
+  margin: 2rem 0;
+}
+
+.middle-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media(min-width: 768px) {
+  .middle-section {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.link-list {
+  list-style: none;
+  padding: 0;
+  background-color: #000;
+}
+
+.link-list li a {
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.3s;
+  background-color: #000;
+}
+
+.link-list li a:hover {
+  color: #818cf8;
+}
+
+.subscribe-text {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+.subscribe-form {
+  display: flex;
+}
+
+.subscribe-form input {
+  flex-grow: 1;
+  padding: 0.5rem;
+  background-color: #111827;
+  border: 1px solid #374151;
+  color: white;
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+  outline: none;
+}
+
+.subscribe-form input:focus {
+  border-color: #6366f1;
+}
+
+.subscribe-form button {
+  background-color: #4f46e5;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.subscribe-form button:hover {
+  background-color: #4338ca;
+}
+
+.bottom-section {
+  align-items: center;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-icons a {
+  color: #9ca3af;
+  transition: color 0.3s;
+}
+
+.social-icons a:hover {
+  color: #818cf8;
+}
+
+

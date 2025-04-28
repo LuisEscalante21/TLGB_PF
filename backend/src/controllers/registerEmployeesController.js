@@ -18,7 +18,7 @@ registerEmployeesController.register = async (req, res) => {
 
     const passwordHash = await bcryptjs.hash(password, 10);
 
-    const newEmployee = new Employee({name, lastName, chargue, telephone, hiringDate, password, idSucursal });
+    const newEmployee = new Employee({name, lastName, chargue, email, telephone, hiringDate, password: passwordHash, idSucursal });
     await newEmployee.save();
     res.json({ message: "employee saved" });
 
@@ -38,7 +38,7 @@ registerEmployeesController.register = async (req, res) => {
   }
   catch (error) {
      console.log(error);
-     res.json({ message: "error register employee" });
+     res.json({ message: "error register employee", error });
   }
 };
 

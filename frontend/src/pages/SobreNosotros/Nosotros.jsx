@@ -24,6 +24,7 @@ const AboutUs = () => {
   ];
 
   return (
+    <div className="about-us-wrapper">
     <div className="about-us-container">
       <div className="about-content">
         <h1 className="about-title">¿Quienes somos nosotros?</h1>
@@ -83,6 +84,7 @@ const AboutUs = () => {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 };

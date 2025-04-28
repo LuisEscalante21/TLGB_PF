@@ -1,11 +1,19 @@
+.about-us-wrapper {
+  margin-top: 100px;
+  height: 100vh; /* Ocupa toda la altura visible */
+  width: 100%;
+}
+
 .about-us-container {
-    display: flex;
-    flex-direction: column;
-    max-width: 1200px;
-    margin: 80px auto 40px;
-    padding: 0 20px;
-    color: white;
-  }
+  display: flex;
+  flex: 1;
+  align-content: center;
+  flex-direction: column;
+  max-width: 1200px;
+  padding: 0 20px;
+  color: white;
+  min-height: calc(100vh - 120px); /* Ajusta según tus márgenes */
+}
   
   .about-content {
     border-radius: 8px;

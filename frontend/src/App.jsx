@@ -1,21 +1,19 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router";
-import Nav from "./components/Nav";
-import LoginPage from "./pages/LoginPage/LoginPage";
-import Home from './pages/Home';
-import RegisterPage from "./pages/Register/Register";
-import AboutUs from "./pages/SobreNosotros/Nosotros";
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+
+import Home from './components/public/Home'
+import Routing from './router/Routing'
+import AboutUs from './pages/SobreNosotros/Nosotros'
 
 function App() {
+  const [count, setCount] = useState(0)
+
   return (
-    <Router>
-      <Nav />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/AboutUs" element={<AboutUs />} />
-      </Routes>
-    </Router>
+    <div className="layout">
+      <Routing />
+    </div>
   )
-};
+}
+
 export default App

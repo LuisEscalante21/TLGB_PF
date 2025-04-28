@@ -13,6 +13,7 @@ import loginRoutes from "./src/routes/login.js";
 import cookieParser from "cookie-parser";
 import logoutRoutes from "./src/routes/logout.js"
 import registerClientsRoutes from "./src/routes/registerClients.js";
+import cors from "cors";
 
 // Creo una constante que es igual
 // a la libreria que importé y la ejecuta
@@ -24,6 +25,15 @@ app.use(express.json());
 
 // que acepte cookies
 app.use(cookieParser());
+
+const corsOptions = {
+    origin: 'http://localhost:5173',
+    credentials: true, // Permite enviar cookies
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 
 // Definir la ruta
 app.use("/api/branches", branchesRoutes);

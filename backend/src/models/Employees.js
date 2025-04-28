@@ -13,9 +13,10 @@ const employeesSchema = new Schema(
         maxLength: 100,
     },
     chargue: {
-        type: String,
-        require: true,
-        maxLength: 100,
+      type: String,
+      enum: ['Admin', 'Manager', 'Employee'], // Valores permitidos
+      required: true,
+      maxLength: 100,
     },
     email: {
       type: String,
@@ -52,5 +53,7 @@ const employeesSchema = new Schema(
     strict: false,
   }
 );
+
+
 
 export default model("Employees", employeesSchema, "Employees");
