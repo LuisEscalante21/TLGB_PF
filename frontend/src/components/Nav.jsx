@@ -12,31 +12,20 @@ const Nav = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const hideNavRoutes = ["/login", "/register"];
-  const shouldHideNav = hideNavRoutes.includes(location.pathname);
+  const hidePlatformNavRoutes = ["/AboutUs", "/news", "/support", "/login", "/register"];
 
-  const platforms = [
-    { name: "PC", icon: monitorIcon },
-    { name: "PlayStation", icon: ps4Icon },
-    { name: "Xbox", icon: xboxIcon },
-    { name: "Nintendo", icon: nintendoIcon }
-  ];
+  const shouldHideNav = hideNavRoutes.includes(location.pathname);
+  const shouldHidePlatformNav = hidePlatformNavRoutes.includes(location.pathname);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 50);
     };
 
     if (location.pathname === "/") {
       window.addEventListener("scroll", handleScroll);
     }
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [location.pathname]);
 
   if (shouldHideNav) {
@@ -44,115 +33,185 @@ const Nav = () => {
   }
 
   return (
-    <nav style={{
-      width: "100vw",
-      position: "fixed",
-      top: 0,
-      left: 0,
-      zIndex: 50,
-      backgroundColor:
-        location.pathname !== "/"
-          ? "#333"
-          : isScrolled
-          ? "#333"
-          : "transparent",
-      color: "white",
-      transition: "background-color 0.3s ease",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center"
-    }}>
-      {/* NAV SUPERIOR - TODO EL ANCHO */}
-      <div style={{
+    <>
+      {/* NAV SUPERIOR */}
+      <nav style={{
         width: "100%",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        backgroundColor: "#222",
+        color: "white",
+        padding: "12px 24px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "12px 24px",
-        boxSizing: "border-box"
+        zIndex: 1000,
+        flexWrap: "wrap",
       }}>
         {/* Logo */}
         <NavLink to="/" style={{ display: "flex", alignItems: "center" }}>
-          <img src={logoTLGB} alt="TLGB" style={{ height: "45px", objectFit: "contain" }} />
+          <img
+            src={logoTLGB}
+            alt="TLGB"
+            style={{
+              height: "45px",
+              objectFit: "contain",
+              transition: "transform 0.3s ease",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
         </NavLink>
 
         {/* Menú */}
         <ul style={{
           display: "flex",
-          gap: "24px",
+          gap: "20px",
           listStyle: "none",
           margin: 0,
           padding: 0,
-          fontSize: "15px",
-          fontWeight: 500
+          fontSize: "14px",
+          fontWeight: 500,
+          flexWrap: "wrap",
         }}>
-          {[
-            { name: "Sobre Nosotros", to: "/AboutUs" },
-            { name: "Contacto", to: "/news" },
-            { name: "Términos y condiciones", to: "/support" }
-          ].map((item, index) => (
-            <li key={index}>
-              <NavLink
-                to={item.to}
-                style={({ isActive }) => ({
-                  color: isActive ? "#FFA500" : "white",
-                  textDecoration: "none",
-                  transition: "color 0.3s ease",
-                  fontSize: "15px",
-                  fontWeight: 500
-                })}
-              >
-                {item.name}
-              </NavLink>
-            </li>
-          ))}
+          <li>
+            <NavLink
+              to="/AboutUs"
+              style={({ isActive }) => ({
+                color: isActive ? "#FFA500" : "white",
+                textDecoration: "none",
+              })}
+            >
+              Sobre Nosotros
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/news"
+              style={({ isActive }) => ({
+                color: isActive ? "#FFA500" : "white",
+                textDecoration: "none",
+              })}
+            >
+              Contacto
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/support"
+              style={({ isActive }) => ({
+                color: isActive ? "#FFA500" : "white",
+                textDecoration: "none",
+              })}
+            >
+              Términos y Condiciones
+            </NavLink>
+          </li>
         </ul>
 
         {/* Iconos */}
         <div style={{
           display: "flex",
           alignItems: "center",
-          gap: "16px"
+          gap: "12px",
         }}>
           <ShoppingCart size={26} style={{ color: "white", cursor: "pointer" }} />
           <NavLink to="/login">
             <User size={28} style={{ color: "white", cursor: "pointer" }} />
           </NavLink>
         </div>
-      </div>
+      </nav>
 
-      {/* NAV INFERIOR: Círculo Plataformas */}
-      {location.pathname === "/" && (
+      {/* NAV INFERIOR DE CONSOLAS */}
+      {!shouldHidePlatformNav && (
         <div style={{
-          marginTop: "12px",
+          position: "fixed",
+          top: "70px",
+          left: "50%",
+          transform: "translateX(-50%)",
           backgroundColor: "#333",
           borderRadius: "9999px",
-          padding: "8px 16px",
+          padding: "10px 18px",
           display: "flex",
           alignItems: "center",
-          gap: "16px",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.5)"
+          gap: "12px",
+          boxShadow: "0 4px 10px rgba(0,0,0,0.5)",
+          zIndex: 999,
+          flexWrap: "wrap",
         }}>
-          {platforms.map((platform, i) => (
-            <button key={i} style={{
-              background: "none",
-              border: "none",
-              color: "white",
-              cursor: "pointer",
+          {/* Botones de consolas */}
+          <NavLink
+            to="/PagePc"
+            style={({ isActive }) => ({
+              backgroundColor: isActive ? "#4B00FF" : "transparent",
               padding: "6px 12px",
-              borderRadius: "999px",
+              borderRadius: "9999px",
               display: "flex",
               alignItems: "center",
               gap: "8px",
-              transition: "all 0.3s ease"
-            }}
-              onMouseEnter={(e) => { e.target.style.backgroundColor = "#444"; }}
-              onMouseLeave={(e) => { e.target.style.backgroundColor = "transparent"; }}
-            >
-              <img src={platform.icon} alt={platform.name} style={{ height: "20px" }} />
-              {platform.name}
-            </button>
-          ))}
+              color: "white",
+              textDecoration: "none",
+              fontWeight: "500",
+              fontSize: "14px",
+            })}
+          >
+            <img src={monitorIcon} alt="PC" style={{ height: "20px" }} /> PC
+          </NavLink>
+
+          <NavLink
+            to="/PagePS4"
+            style={({ isActive }) => ({
+              backgroundColor: isActive ? "#0070F3" : "transparent",
+              padding: "6px 12px",
+              borderRadius: "9999px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "white",
+              textDecoration: "none",
+              fontWeight: "500",
+              fontSize: "14px",
+            })}
+          >
+            <img src={ps4Icon} alt="PlayStation" style={{ height: "20px" }} /> PlayStation
+          </NavLink>
+
+          <NavLink
+            to="/PageXbox"
+            style={({ isActive }) => ({
+              backgroundColor: isActive ? "#00FF00" : "transparent",
+              padding: "6px 12px",
+              borderRadius: "9999px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "white",
+              textDecoration: "none",
+              fontWeight: "500",
+              fontSize: "14px",
+            })}
+          >
+            <img src={xboxIcon} alt="Xbox" style={{ height: "20px" }} /> Xbox
+          </NavLink>
+
+          <NavLink
+            to="/PageNintendo"
+            style={({ isActive }) => ({
+              backgroundColor: isActive ? "#E60012" : "transparent",
+              padding: "6px 12px",
+              borderRadius: "9999px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "white",
+              textDecoration: "none",
+              fontWeight: "500",
+              fontSize: "14px",
+            })}
+          >
+            <img src={nintendoIcon} alt="Nintendo" style={{ height: "20px" }} /> Nintendo
+          </NavLink>
 
           {/* Botón de búsqueda */}
           <div style={{
@@ -164,11 +223,11 @@ const Nav = () => {
             alignItems: "center",
             justifyContent: "center"
           }}>
-            <Search size={22} color="white" />
+            <Search size={20} color="white" />
           </div>
         </div>
       )}
-    </nav>
+    </>
   );
 };
 

@@ -1,26 +1,28 @@
 import React from "react";
 import assassinImage from "../../img/assasin.png";
+import ZeldaImage from "../../img/zelda.png";
+import WitcherImage from "../../img/theWitcher.png";
+import eldenImage from "../../img/Elden Ring.png";
 
 const Home = () => {
   const games = [
-    { name: "Marvel Rivals", price: "$15.99", discount: "-10%", img: assassinImage },
-    { name: "Rocket League", price: "FREE", discount: "FREE", img: assassinImage },
-    { name: "The Witcher 3", price: "$39.99", discount: "-30%", img: assassinImage },
-    { name: "Cyberpunk 2077", price: "$29.99", discount: "-50%", img: assassinImage },
-    { name: "Hogwarts Legacy", price: "$59.99", discount: "-20%", img: assassinImage },
-    { name: "Resident Evil", price: "$39.99", discount: "-15%", img: assassinImage },
+    { name: "Marvel Rivals", price: "$15.99", discount: "-10%", img: ZeldaImage },
+    { name: "Rocket League", price: "FREE", discount: "FREE", img: eldenImage },
+    { name: "The Witcher 3", price: "$39.99", discount: "-30%", img: WitcherImage },
   ];
 
   return (
     <div
       style={{
         minHeight: "200vh",
-        paddingTop: "150px",
-        width: "100vw",
-        margin: 0,
-        padding: 0,
+        width: "100%",
         overflowX: "hidden",
         backgroundColor: "#222",
+        paddingTop: "180px",
+        paddingBottom: "60px",
+        boxSizing: "border-box",
+        margin: 0,
+        position: "relative",
       }}
     >
       {/* Imagen principal */}
@@ -32,28 +34,30 @@ const Home = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       ></div>
 
-      {/* Contenido */}
+      {/* Contenido principal */}
       <div
         style={{
-          width: "100%",
           maxWidth: "1400px",
           margin: "0 auto",
           padding: "32px 16px",
         }}
       >
-        {/* Tendencias - ahora es un link */}
+        {/* Tendencias */}
         <a
           href="#"
           style={{
             color: "white",
-            fontSize: "40px",
+            fontSize: "2.5rem",
             marginBottom: "24px",
             display: "inline-block",
-            textDecoration: "none",
             fontWeight: "bold",
+            textDecoration: "none",
             transition: "color 0.3s ease",
           }}
           onMouseEnter={(e) => (e.target.style.color = "#FF4500")}
@@ -64,10 +68,11 @@ const Home = () => {
 
         <hr style={{ borderColor: "white", margin: "24px 0" }} />
 
+        {/* Tarjetas de juegos */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             gap: "32px",
           }}
         >
@@ -75,37 +80,45 @@ const Home = () => {
             <div
               key={index}
               style={{
-                backgroundColor: "#333",
                 borderRadius: "16px",
                 overflow: "hidden",
                 position: "relative",
                 cursor: "pointer",
                 boxShadow: "0 6px 10px rgba(0,0,0,0.6)",
                 transition: "transform 0.3s ease",
+                backgroundColor: "#333",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
             >
-              {/* Imagen ahora más alta */}
-              <div style={{ width: "100%", height: "280px", overflow: "hidden" }}>
+              {/* Imagen */}
+              <div style={{ width: "100%", height: "300px", overflow: "hidden" }}>
                 <img
                   src={game.img}
                   alt={game.name}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    transition: "transform 0.3s ease",
+                  }}
                 />
               </div>
 
-              {/* Nombre + Precio */}
+              {/* Información del juego */}
               <div
                 style={{
                   position: "absolute",
                   bottom: "16px",
                   left: "16px",
                   color: "white",
-                  textShadow: "0 2px 5px rgba(0,0,0,0.8)",
+                  textShadow: "0 2px 8px rgba(0,0,0,0.8)",
                   display: "flex",
                   flexDirection: "column",
                   gap: "8px",
+                  backgroundColor: "rgba(0,0,0,0.6)",
+                  padding: "8px 12px",
+                  borderRadius: "8px",
                 }}
               >
                 <span style={{ fontSize: "18px", fontWeight: "bold" }}>
@@ -127,7 +140,9 @@ const Home = () => {
                   </span>
 
                   {game.discount !== "FREE" && (
-                    <span style={{ fontSize: "14px", color: "#ccc" }}>{game.price}</span>
+                    <span style={{ fontSize: "14px", color: "#ccc" }}>
+                      {game.price}
+                    </span>
                   )}
                 </div>
               </div>
