@@ -4,12 +4,15 @@ import Swal from 'sweetalert2';
 import moment from "moment";
 import ProductCard from './ProductPlatform';
 import TarjetasRegalo from './TarjetasRegalo';
+import ProductDetail from './ProductDetail';
 
 const PlayStation = () => {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
   const [lastUpdate, setLastUpdate] = useState(new Date());
+  const [selectedProduct, setSelectedProduct] = useState(null); // <<< estado para el detalle
+
 
   useEffect(() => {
     getProducts(1, false);
@@ -127,8 +130,11 @@ const PlayStation = () => {
       <div className="content__products">
         {products.length > 0 ? (
           products.map((product) => (
-            <ProductCard key={product._id} product={product} />
-            
+            <ProductCard
+              key={product._id}
+              product={product}
+              onClick={() => setSelectedProduct(product)}
+            />
           ))
         ) : (
           <p className="products__empty">Cargando productos...</p>

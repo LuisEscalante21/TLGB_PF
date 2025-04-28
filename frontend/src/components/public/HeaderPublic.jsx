@@ -31,7 +31,7 @@ const HeaderPublic = () => {
           </li>
           <li>
             <NavLink 
-              to="/news" 
+              to="/contact" 
               className={({ isActive }) => 
                 isActive ? "nav-link active" : "nav-link"
               }

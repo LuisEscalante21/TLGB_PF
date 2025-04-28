@@ -14,6 +14,8 @@ import { PublicRoute } from '../components/public/PublicRoute'
 import PC from '../components/public/PC'
 import Xbox from '../components/public/Xbox'
 import Nintendo from '../components/public/Nintendo'
+import ProductDetail from '../components/public/ProductDetail'
+import Contact from '../components/public/Contact'
 
 const Routing = () => {
   return (
@@ -36,6 +38,8 @@ const Routing = () => {
             <Route path="pc" element={<PC />} />
             <Route path="xbox" element={<Xbox />} />
             <Route path="nintendo" element={<Nintendo />} />
+            <Route path="/producto/:id" element={<ProductDetail />} />
+            <Route path="contact" element={<Contact />} />
           </Route>
           <Route path="*" element={
             <>
