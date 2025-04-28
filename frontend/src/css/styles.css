@@ -55,7 +55,7 @@ body {
 }
 
 .nav-logo {
-  height: 150px;
+  height: 100px;
   object-fit: contain;
   object-position: left center;
 }
