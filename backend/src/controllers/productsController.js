@@ -3,6 +3,7 @@ import productsModel from "../models/Products.js";
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -82,6 +83,62 @@ productsController.getProducts = async (req, res) => {
     return res.status(500).json({
       status: "error",
       message: "Error interno del servidor"
+    });
+  }
+};
+
+productsController.getProductById = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    // Validar que el ID tenga formato válido (opcional)
+    if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({
+        status: "error",
+        message: "ID de producto no válido"
+      });
+    }
+
+    // Buscar el producto en la base de datos
+    const product = await productsModel.findById(productId)
+      .populate({
+        path: 'idSupplier',
+        select: 'name image rating' // Puedes incluir más campos si necesitas
+      })
+      .populate({
+        path: 'platforms',
+        select: 'name icon' // Campos de las plataformas
+      })
+      .lean(); // Convertir a objeto JavaScript
+
+    // Si no se encuentra el producto
+    if (!product) {
+      return res.status(404).json({
+        status: "error",
+        message: "Producto no encontrado"
+      });
+    }
+
+    // Formatear la respuesta según necesidades
+    const response = {
+      status: "success",
+      product: {
+        ...product,
+        // Puedes agregar campos calculados o formateados aquí
+        finalPrice: product.discount > 0 
+          ? product.price * (1 - product.discount / 100)
+          : product.price
+      }
+    };
+
+    return res.status(200).json(response);
+
+  } catch (error) {
+    console.error('Error al buscar producto por ID:', error);
+    return res.status(500).json({
+      status: "error",
+      message: "Error interno del servidor al buscar el producto",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
