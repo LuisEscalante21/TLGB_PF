@@ -1,12 +1,13 @@
 import React, { createContext, useEffect, useState } from "react";
 import { Global } from "../helpers/Global";
 
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({
     userId: null,
-    userType: null,
+    role: null,  // Changed from userType to role for clarity
     email: null
   });
   const [loading, setLoading] = useState(true);
@@ -15,9 +16,15 @@ export const AuthProvider = ({ children }) => {
   const getUserDataFromCookies = () => {
     const cookies = document.cookie.split("; ");
     const userDataCookie = cookies.find((row) => row.startsWith("userData="));
-    return userDataCookie
-      ? JSON.parse(decodeURIComponent(userDataCookie.split("=")[1]))
-      : null;
+    if (userDataCookie) {
+      try {
+        return JSON.parse(decodeURIComponent(userDataCookie.split("=")[1]));
+      } catch (e) {
+        console.error("Error parsing userData cookie:", e);
+        return null;
+      }
+    }
+    return null;
   };
 
   const saveUserDataToCookies = (userData) => {
@@ -60,7 +67,7 @@ export const AuthProvider = ({ children }) => {
       if (data.status === "success") {
         const userData = {
           userId: data.user.userId,
-          userType: data.user.userType,
+          role: data.user.role || data.user.userType, // Support both role and userType from backend
           email: data.user.email,
         };
 
@@ -68,7 +75,7 @@ export const AuthProvider = ({ children }) => {
         saveUserDataToCookies(userData);
         setAuth(userData);
 
-        return { success: true };
+        return { success: true, role: userData.role };
       }
 
       return { success: false, message: data.message };
@@ -84,7 +91,7 @@ export const AuthProvider = ({ children }) => {
         credentials: "include",
       });
     } finally {
-      setAuth({ userId: null, userType: null, email: null });
+      setAuth({ userId: null, role: null, email: null });
       deleteUserDataCookie();
     }
   };
@@ -98,9 +105,11 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         isAuthenticated: !!auth.userId,
-        isAdmin: auth.userType === "Admin",
-        isEmployee: auth.userType === "Employee",
-        isClient: auth.userType === "Client",
+        isAdmin: auth.role === "Admin",
+        isManager: auth.role === "Manager",
+        isEmployee: auth.role === "Employee",
+        isClient: auth.role === "Client",
+        userRole: auth.role // Direct access to the role
       }}
     >
       {children}

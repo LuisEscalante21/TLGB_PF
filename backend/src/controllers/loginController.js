@@ -15,23 +15,29 @@ loginController.login = async (req, res) => {
   
     try {
       let userFound;
-      let userType;
+      let role;
   
       // 1. Primero verificar si es el Admin hardcodeado
       if (email === config.emailAdmin.email && password === config.emailAdmin.password) {
-        userType = "Admin";
-        userFound = { _id: "Admin" };
+        role = "Admin";
+        userFound = { _id: "admin_id", email: config.emailAdmin.email };
       } else {
         // 2. Buscar en empleados
         userFound = await EmployeesModel.findOne({ email });
         
-        // Si es empleado, verificar si es Admin por su cargo
+        // Determinar rol basado en cargo
         if (userFound) {
-          userType = userFound.chargue === "Admin" ? "Admin" : "Employee";
+          if (userFound.chargue === "Admin") {
+            role = "Admin";
+          } else if (userFound.chargue === "Manager") {
+            role = "Manager";
+          } else {
+            role = "Employee";
+          }
         } else {
           // 3. Si no es empleado, buscar como Cliente
           userFound = await clientsModel.findOne({ email });
-          userType = "Client";
+          role = "Client";
         }
       }
   
@@ -53,14 +59,14 @@ loginController.login = async (req, res) => {
   
       // Generar token
       const token = jsonwebtoken.sign(
-        { id: userFound._id, userType },
+        { id: userFound._id, role },
         config.JWT.secret,
         { expiresIn: config.JWT.expiresIn }
       );
 
       const userData = {
         userId: userFound._id,
-        userType: userFound.userType,
+        role: role,
         email: userFound.email
       };
   
@@ -71,19 +77,17 @@ loginController.login = async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000
       });
 
-      res.cookie("userData", encodeURIComponent(JSON.stringify(userData)), {
+      res.cookie("userData", JSON.stringify(userData), {
         httpOnly: false,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 24 * 60 * 60 * 1000,
-        encode: String // Esto evita la doble codificación
+        maxAge: 24 * 60 * 60 * 1000
       });
   
       return res.json({ 
         status: "success",
         message: "Login exitoso",
-        user: userData,
-       
+        user: userData
       });
   
     } catch (error) {

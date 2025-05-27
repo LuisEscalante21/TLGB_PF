@@ -1,0 +1,22 @@
+.app-container {
+    display: grid;
+    grid-template-areas:
+      "navbar"
+      "content";
+    grid-template-rows: auto 1fr;
+    min-height: 100vh;
+    width: 100vw;                /* Asegura que se expanda a todo el ancho */
+    overflow: hidden;
+  }
+  
+
+  .navbar {
+    grid-area: navbar;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.01rem 2rem;
+    margin: 0 2rem 2rem 2rem;
+    margin-top: 15px;
+  }
+  

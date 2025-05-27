@@ -4,41 +4,82 @@ import Employee from "../models/Employees.js";
 import bcryptjs from "bcryptjs"
 import jsonwebtoken from "jsonwebtoken"
 import { config } from "../config.js";
+import { v2 as cloudinary } from "cloudinary"
+
+
+cloudinary.config({
+  cloud_name: config.cloudinary.cloudinary_name,
+  api_key: config.cloudinary.cloudinary_api_key,
+  api_secret: config.cloudinary.cloudinary_api_secret,
+});
 
 // I N S E R T
 registerEmployeesController.register = async (req, res) => {
-  const {name, lastName, email, chargue, telephone, hiringDate, password, idSucursal  } = req.body;
-  try{
+  try {
+    const { name, lastName, email, chargue, telephone, hiringDate, password, idSucursal } = req.body;
 
-    //Verifica si existe el empleado
-    const existEmployee = await Employee.findOne({email})
-    if(existEmployee){
-        return res.json({ message: "employee already exist" });
+    // Validate required fields
+    if (!password) {
+      return res.status(400).json({ message: "La contraseña es requerida" });
     }
 
-    const passwordHash = await bcryptjs.hash(password, 10);
+    // Verify if employee exists
+    const existEmployee = await Employee.findOne({ email });
+    if (existEmployee) {
+      return res.status(400).json({ message: "El empleado ya existe" });
+    }
 
-    const newEmployee = new Employee({name, lastName, chargue, email, telephone, hiringDate, password: passwordHash, idSucursal });
+    let imageUrl = "";
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "employees",
+        allowed_formats: ["jpg", "png", "jpeg"],
+      });
+      imageUrl = result.secure_url;
+    }
+
+    // Ensure password is a string before hashing
+    const passwordString = String(password);
+    const passwordHash = await bcryptjs.hash(passwordString, 10);
+
+    const newEmployee = new Employee({
+      name,
+      lastName,
+      chargue,
+      email,
+      telephone,
+      hiringDate,
+      password: passwordHash,
+      idSucursal,
+      image: imageUrl
+    });
+
     await newEmployee.save();
-    res.json({ message: "employee saved" });
 
-    jsonwebtoken.sign(
-        //1- que voy a guardar
-        {id: newEmployee._id},
-        //2- clave secreta
-        config.JWT.secret,
-        //3- cuando expira
-        {expiresIn: config.JWT.expiresIn},
-        //4- funcion flecha
-        (error, token) => {
-            if(error) console.log (error);
-            res.cookie("authToken", token);
-        }
+    const token = jsonwebtoken.sign(
+      { id: newEmployee._id },
+      config.JWT.secret,
+      { expiresIn: config.JWT.expiresIn }
     );
-  }
-  catch (error) {
-     console.log(error);
-     res.json({ message: "error register employee", error });
+
+    res.status(201).json({ 
+      message: "Empleado registrado correctamente",
+      employee: {
+        _id: newEmployee._id,
+        name: newEmployee.name,
+        email: newEmployee.email,
+        image: newEmployee.image
+      },
+      token
+    });
+
+  } catch (error) {
+    console.error("Error detallado:", error);
+    res.status(500).json({ 
+      message: "Error al registrar empleado",
+      error: error.message,
+      stack: error.stack // Include stack trace for debugging
+    });
   }
 };
 

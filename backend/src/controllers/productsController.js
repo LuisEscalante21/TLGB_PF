@@ -5,6 +5,15 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 
+import { v2 as cloudinary } from "cloudinary"
+import { config }  from "../config.js";
+
+cloudinary.config({
+  cloud_name: config.cloudinary.cloudinary_name,
+  api_key: config.cloudinary.cloudinary_api_key,
+  api_secret: config.cloudinary.cloudinary_api_secret,
+});
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -354,6 +363,48 @@ productsController.getProductsByPlatformAndConsole = async (req, res) => {
   }
 };
 
+productsController.getAllProducts = async (req, res) => {
+  try {
+    const page = parseInt(req.params.page) || 1;
+    const itemsPerPage = 10;
+
+    const options = {
+      page,
+      limit: itemsPerPage,
+      sort: { _id: 1 },
+      populate: [
+        { path: 'idSupplier', select: 'name' },
+        { path: 'platforms', select: 'name consoles' }
+      ]
+    };
+
+    const result = await productsModel.paginate({}, options);
+
+    if (result.docs.length === 0) {
+      return res.status(404).json({
+        status: "success",
+        message: "No hay productos disponibles",
+        products: []
+      });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      page: result.page,
+      itemsPerPage: result.limit,
+      total: result.totalDocs,
+      pages: result.totalPages,
+      products: result.docs
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "error",
+      message: "Error interno del servidor"
+    });
+  }
+};
+
 productsController.uploadProductImages = async (req, res) => {
   try {
     // Obtener archivos subidos
@@ -524,7 +575,7 @@ productsController.media = async (req, res) => {
 // I N S E R T
 productsController.insertProducts = async (req, res) => {
   try {
-    const { name, type, platforms, description, genres, releaseDate, idSupplier} = req.body;
+    const { name, type, platforms, description, genres, releaseDate, idSupplier, initialStock } = req.body;
 
     if (!platforms || !Array.isArray(platforms)) {
       return res.status(400).json({
@@ -533,6 +584,7 @@ productsController.insertProducts = async (req, res) => {
       });
     }
 
+    // Validate platforms and consoles
     const isValid = platforms.every(platform => {
       if (!platform || !platform.name || !platform.consoles) return false;
       
@@ -553,15 +605,56 @@ productsController.insertProducts = async (req, res) => {
       });
     }
 
-    const newProduct = new productsModel({name, type, platforms, description, genres, releaseDate, idSupplier});
+    // Handle image uploads
+    const images = [];
+    if (req.files && req.files.length > 0) {
+      await Promise.all(req.files.map(async (file) => {
+        const result = await cloudinary.uploader.upload(file.path, {
+          folder: "products",
+          allowed_formats: ["jpg", "png", "jpeg"]
+        });
+        images.push({
+          url: result.secure_url,
+          publicId: result.public_id,
+          storedName: result.original_filename
+        });
+      }));
+    }
+
+    const newProduct = new productsModel({
+      name, 
+      type, 
+      platforms, 
+      description, 
+      genres, 
+      releaseDate, 
+      idSupplier,
+      images
+    });
 
     await newProduct.save();
 
-    res.status(201).json({ 
+    // Create initial stock records if provided
+    if (initialStock && Array.isArray(initialStock)) {
+      await Promise.all(initialStock.map(async (stockItem) => {
+        const newStock = new stockModel({
+          idBranch: stockItem.idBranch,
+          idProduct: newProduct._id,
+          Stock: stockItem.quantity
+        });
+        await newStock.save();
+      }));
+    }
+
+    res.status(200).json({ 
       status: "success",
       message: "Producto guardado exitosamente",
-      data: newProduct 
+      data: {
+        product: newProduct,
+        stock: initialStock || []
+      } 
     });
+
   } catch (error) {
     console.error("Error al insertar producto:", error);
     res.status(500).json({ 
@@ -569,6 +662,27 @@ productsController.insertProducts = async (req, res) => {
       message: "Error al guardar el producto",
       error: error.message 
     });
+  }
+};
+
+productsController.getProductWithStock = async (req, res) => {
+  try {
+    const product = await productsModel.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ status: "error", message: "Producto no encontrado" });
+    }
+
+    const stock = await stockModel.find({ idProduct: product._id }).populate('idBranch');
+    
+    res.status(200).json({
+      status: "success",
+      data: {
+        product,
+        stock
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ status: "error", message: error.message });
   }
 };
 

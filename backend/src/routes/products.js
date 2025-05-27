@@ -21,6 +21,7 @@ router.post(
   productsController.uploadProductImages
 );
 router.get('/images/:id', productsController.getAllImages);
+router.get('/all/:page?', productsController.getAllProducts);
 router.get('/product/:id', productsController.getProductById);
 router.get("/:type/:page?", productsController.getProducts); 
 router.get('/platform/:platform/:type/:page?', productsController.getProductsByPlatform);

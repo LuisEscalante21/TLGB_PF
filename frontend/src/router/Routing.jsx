@@ -17,6 +17,13 @@ import Nintendo from '../components/public/Nintendo'
 import ProductDetail from '../components/public/ProductDetail'
 import Contact from '../components/public/Contact'
 import TermsAndConditions  from '../components/public/Terms&Conditions'
+import { PublicOnlyRoute } from '../components/public/PublicOnlyRoute'
+import { PrivateRouter } from '../components/private/PrivateLayout/PrivateRouter'
+import PrivateLayout from '../components/private/PrivateLayout/PrivateLayout'
+import HomePrivate from '../components/private/HomePrivate'
+import GestionProductos from '../components/private/pages/Products/GestionProductos'
+import GestionEmpleados from '../components/private/pages/Employees/GestionEmpleados'
+import PaymentScreen from '../components/private/pages/Pago/PaymentScreen'
 
 const Routing = () => {
   return (
@@ -25,10 +32,12 @@ const Routing = () => {
 
         <Routes>
 
-          <Route element={<PublicRoute />}>
-            <Route path="/login" element={<LoginPage />} />
+              <Route path="/login" element={
+                <PublicOnlyRoute>
+                  <LoginPage />
+                </PublicOnlyRoute>
+              } />
             <Route path="/register" element={<RegisterPage />} />
-          </Route>
           <Route path="/logout" element={<Logout />} />
 
           <Route path="/" element={<PublicLayout />}>
@@ -43,6 +52,17 @@ const Routing = () => {
             <Route path="contact" element={<Contact />} />
             <Route path="terminos" element={<TermsAndConditions />} />
           </Route>
+
+          <Route element={<PrivateRouter />}>
+              <Route path="/social" element={<PrivateLayout />} >
+                <Route index element={<HomePrivate />} /> 
+                <Route path="home" element={<HomePrivate />} />
+                <Route path="productos" element={<GestionProductos />} />
+                <Route path="empleados" element={<GestionEmpleados />} />
+                <Route path="pago" element={<PaymentScreen />} />
+              </Route>
+          </Route>
+
           <Route path="*" element={
             <>
               <p>

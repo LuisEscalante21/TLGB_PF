@@ -9,6 +9,10 @@ import Footer from './Footer'
 const PublicLayout = () => {
   const { auth } = useAuth();
 
+  if (auth.userId && auth.userType !== 'Client') {
+    return <Navigate to="/social" replace />;
+  }
+
   return (
     <>
       <HeaderPublic />
@@ -16,6 +20,7 @@ const PublicLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      
     </>
   );
 };

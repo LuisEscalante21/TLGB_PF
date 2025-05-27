@@ -27,7 +27,7 @@ const employeesSchema = new Schema(
     telephone: {
         type: String,
         require: true,
-        minLength: 9,
+        minLength: 8,
         maxLength: 100,
     },
     hiringDate: {
@@ -42,6 +42,7 @@ const employeesSchema = new Schema(
         minLength: 6,
         maxLength: 100,
       },
+    image: { type: String },
     idSucursal: {
       type: Schema.Types.ObjectId,
       ref: "Branches",
