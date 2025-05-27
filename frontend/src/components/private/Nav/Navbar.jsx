@@ -48,6 +48,16 @@ function Navbar() {
           
           <span>Cuenta</span>
         </Link>
+
+           
+        <Link 
+          to="Proveedores" 
+          className={`admin-nav-item ${isActive('/admin-account') ? 'active' : ''}`}
+        >
+          
+          <span>Proveedor</span>
+        </Link>
+
       </div>
     </nav>
   );

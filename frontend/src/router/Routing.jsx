@@ -24,6 +24,7 @@ import HomePrivate from '../components/private/HomePrivate'
 import GestionProductos from '../components/private/pages/Products/GestionProductos'
 import GestionEmpleados from '../components/private/pages/Employees/GestionEmpleados'
 import PaymentScreen from '../components/private/pages/Pago/PaymentScreen'
+import Gestionsuppliers from '../components/private/pages/suppliers/Gestionsuppliers'
 
 const Routing = () => {
   return (
@@ -60,6 +61,8 @@ const Routing = () => {
                 <Route path="productos" element={<GestionProductos />} />
                 <Route path="empleados" element={<GestionEmpleados />} />
                 <Route path="pago" element={<PaymentScreen />} />
+                <Route path="Proveedores" element={<Gestionsuppliers />} />
+
               </Route>
           </Route>
 

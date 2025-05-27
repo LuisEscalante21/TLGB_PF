@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { LuX } from 'react-icons/lu';
-import './AddEmployeeModal.css'; // Reutilizamos los mismos estilos
+import './AddEmployeeModal.css'; 
 
 const EditEmployeeModal = ({ employee, onClose, onUpdate, branches, charges }) => {
   const [formData, setFormData] = useState({
@@ -11,7 +11,7 @@ const EditEmployeeModal = ({ employee, onClose, onUpdate, branches, charges }) =
     telephone: '',
     hiringDate: '',
     idSucursal: ''
-  });
+  });ñ
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
