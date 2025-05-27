@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Gestionsuppliers.css';
+import './Gestion.css';
 import { LuPlus, LuCheck, LuX, LuPencil, LuTrash2 } from 'react-icons/lu';
 import { Global } from '../../../../helpers/Global';
 import EditSupplierModal from './EditsuppliersModal';

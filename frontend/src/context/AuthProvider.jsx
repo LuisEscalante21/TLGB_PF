@@ -16,6 +16,8 @@ export const AuthProvider = ({ children }) => {
   const getUserDataFromCookies = () => {
     const cookies = document.cookie.split("; ");
     const userDataCookie = cookies.find((row) => row.startsWith("userData="));
+    console.log
+("userDataCookie:", userDataCookie); // Debugging line
     if (userDataCookie) {
       try {
         return JSON.parse(decodeURIComponent(userDataCookie.split("=")[1]));
