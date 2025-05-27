@@ -1,5 +1,5 @@
 import express from "express";
-import shoppingcartController from "../controllers/shoppingCartController.js"; // Add .js extension
+import shoppingcartController from "../controllers/shoppingcartController.js"; // Add .js extension
 
 const router = express.Router();
 
