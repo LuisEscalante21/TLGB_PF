@@ -9,6 +9,14 @@
   color: white;
   font-family: system-ui, -apple-system, sans-serif;
 }
+.payment-product-thumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 12px;
+}
+
 
 .payment-header {
   display: flex;
@@ -41,6 +49,13 @@
   font-weight: bold;
   margin-left: 0.5rem;
   color: #22d3ee;
+}
+ .payment-product-image {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-right: 1rem;
 }
 
 .payment-close-btn {

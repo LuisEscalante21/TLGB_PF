@@ -26,34 +26,27 @@ export const LoginPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: 'include' // Necesario para cookies
+        credentials: 'include'
       });
 
       const data = await request.json();
 
-      console.log(data);
-      console.log(data.user);
+      if (data.status === "success") {
+        setSaved("login");
+        setAuth({
+          userId: data.user.userId,
+          userType: data.user.userType,
+          email: data.user.email
+        });
 
-        if (data.status === "success") {
-          setSaved("login");
-          //setAuth(userData.user);
-
-          setAuth({
-            userId: data.user.userId,
-            userType: data.user.userType,
-            email: data.user.email
-          });
-          
-          Swal.fire({
-            title: "¡Inicio de Sesión exitoso!",
-            text: "Serás redirigido en breve",
-            icon: "success",
-            confirmButtonText: "Aceptar",
-          }).then(() => {
-            navigate("/"); // o solo "/" si querés ir al inicio
-          });
-        
-         
+        Swal.fire({
+          title: "¡Inicio de Sesión exitoso!",
+          text: "Serás redirigido en breve",
+          icon: "success",
+          confirmButtonText: "Aceptar",
+        }).then(() => {
+          navigate("/");
+        });
       } else {
         setSaved("error");
         Swal.fire({
@@ -66,7 +59,7 @@ export const LoginPage = () => {
     } catch (error) {
       setSaved("error");
       console.error("Login error:", error);
-      
+
       let errorMessage = "Ocurrió un error al intentar iniciar sesión";
       if (error.message.includes("Failed to fetch")) {
         errorMessage = "No se pudo conectar con el servidor";

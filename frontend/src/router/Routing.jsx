@@ -46,6 +46,7 @@ const Routing = () => {
             <Route path="home" element={<Home />} /> 
             <Route path="AboutUs" element={<AboutUs />} />
             <Route path="playstation" element={<PlayStation />} />
+             <Route path="pago" element={<PaymentScreen />} />
             <Route path="pc" element={<PC />} />
             <Route path="xbox" element={<Xbox />} />
             <Route path="nintendo" element={<Nintendo />} />
@@ -60,7 +61,6 @@ const Routing = () => {
                 <Route path="home" element={<HomePrivate />} />
                 <Route path="productos" element={<GestionProductos />} />
                 <Route path="empleados" element={<GestionEmpleados />} />
-                <Route path="pago" element={<PaymentScreen />} />
                 <Route path="Proveedores" element={<Gestionsuppliers />} />
 
               </Route>

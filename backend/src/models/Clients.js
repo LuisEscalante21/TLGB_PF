@@ -4,36 +4,37 @@ const clientsSchema = new Schema(
   {
     name: {
       type: String,
-      require: true,
+      required: true, // corregido
       maxLength: 100,
     },
     lastName: {
-        type: String,
-        require: true,
-        maxLength: 100,
+      type: String,
+      required: true, // corregido
+      maxLength: 100,
     }, 
     telephone: {
-        type: String,
-        require: true,
-        minLength: 9,
-        maxLength: 100,
+      type: String,
+      required: true, // corregido
+      minLength: 9,
+      maxLength: 100,
     },
     password: {
-        type: String,
-        required: true,
-        minLength: 6,
-        maxLength: 100,
-      },
+      type: String,
+      required: true,
+      minLength: 6,
+      maxLength: 100,
+    },
     email: {
-        type: String,
-        require: true,
-        maxLength: 100,
-        unique: true,
+      type: String,
+      required: true, // corregido
+      maxLength: 100,
+      unique: true,
     }, 
-    isVerified:{
+    isVerified: {
       type: Boolean,
-      require: true,
-  },
+      required: true, // corregido
+      default: false, // valor por defecto
+    },
   },
   {
     timestamps: true,
@@ -41,4 +42,4 @@ const clientsSchema = new Schema(
   }
 );
 
-export default model("Clients", clientsSchema, "Clients");
+export default model("Clients", clientsSchema);

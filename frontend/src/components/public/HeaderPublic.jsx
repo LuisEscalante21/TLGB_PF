@@ -52,7 +52,9 @@ const HeaderPublic = () => {
         </ul>
 
         <div className="nav-icons">
+          <NavLink to="pago">
           <ShoppingCart size={34} className="nav-icon" />
+          </NavLink>
           {auth.userId ? (
             <NavLink to="/logout" className="list-end__link">
             <i className="fa-solid fa-arrow-right-from-bracket"></i>

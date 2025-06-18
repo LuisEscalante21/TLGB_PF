@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router';
 import { Global } from '../../helpers/Global';
 import Swal from 'sweetalert2';
+import { useCart } from "../../context/CartContext";
 
 const ProductDetail = () => {
     const { id } = useParams();
     const location = useLocation();
     const initialConsoleId = location.state?.consoleId || null;
     const [product, setProduct] = useState(null);
-    const [selectedConsole, setSelectedConsole] = useState(null); // 👈 Aquí guardamos lo seleccionado
-    const [allConsoles, setAllConsoles] = useState([]); // 👈 Aquí guardamos todas las consolas disponibles
+    const [selectedConsole, setSelectedConsole] = useState(null);
+    const [allConsoles, setAllConsoles] = useState([]);
+    const { addToCart } = useCart();
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -29,15 +31,20 @@ const ProductDetail = () => {
             if (data.status === 'success') {
               setProduct(data.product);
 
-              // 👉 Armar lista combinada de todas las consolas
+              // Armar lista combinada de todas las consolas
               const consoles = [];
               data.product.platforms.forEach((platform) => {
                 platform.consoles.forEach((console) => {
                   consoles.push({
+                    id: console._id, // 👈 Cambiar consoleId por id
+                    productId: data.product._id, // 👈 Agregar referencia al producto
+                    productName: data.product.name, // 👈 Nombre del producto
                     platformName: platform.name,
-                    consoleId: console._id,
+                    consoleId: console._id, // 👈 Mantener para compatibilidad
                     consoleName: console.name,
-                    price: console.price
+                    price: console.price,
+                    // Agregar más información útil para el carrito
+                    image: data.product.images?.[0]?.storedName || 'default.png'
                   });
                 });
               });
@@ -73,6 +80,34 @@ const ProductDetail = () => {
       const selectedId = event.target.value;
       const consoleSelected = allConsoles.find(c => c.consoleId === selectedId);
       setSelectedConsole(consoleSelected);
+    };
+
+    const handleAddToCart = () => {
+      if (selectedConsole) {
+        // 👈 Crear objeto optimizado para el carrito
+        const cartItem = {
+          id: selectedConsole.id, // 👈 Usar el id correcto
+          productId: selectedConsole.productId,
+          productName: selectedConsole.productName,
+          platformName: selectedConsole.platformName,
+          consoleName: selectedConsole.consoleName,
+          price: selectedConsole.price,
+          image: selectedConsole.image,
+          // Crear un nombre descriptivo para mostrar en el carrito
+          displayName: `${selectedConsole.productName} - ${selectedConsole.platformName}`
+        };
+        
+        addToCart(cartItem);
+        
+        // Mostrar confirmación
+        Swal.fire({
+          title: '¡Agregado al carrito!',
+          text: `${cartItem.displayName}`,
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false
+        });
+      }
     };
 
     return (
@@ -119,7 +154,10 @@ const ProductDetail = () => {
                   <p><strong>Plataforma:</strong> {selectedConsole.platformName}</p>
                   <p><strong>Consola:</strong> {selectedConsole.consoleName}</p>
                   <p><strong>Precio:</strong> ${selectedConsole.price.toFixed(2)}</p>
-                  <button className="btn-primary">
+                  <button
+                    className="btn-primary"
+                    onClick={handleAddToCart} // 👈 Usar la nueva función
+                  >
                     Añadir al carrito
                   </button>
                 </div>

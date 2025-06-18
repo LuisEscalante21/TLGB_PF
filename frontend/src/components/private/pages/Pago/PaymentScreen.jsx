@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { X, ArrowLeft, CreditCard, DollarSign } from 'lucide-react';
+import { useCart } from '../../../../context/CartContext.jsx';
 import './PaymentScreen.css';
 
 export default function PaymentScreen() {
@@ -10,6 +11,13 @@ export default function PaymentScreen() {
   const [cardHolder, setCardHolder] = useState('J. Smith');
   const [fullName, setFullName] = useState('');
   const [billingAddress, setBillingAddress] = useState('');
+
+  const { cartItems } = useCart();
+
+  // Calcular totales
+  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const iva = 0;
+  const total = subtotal + iva;
 
   // Función para cambiar el método de pago
   const handlePaymentMethodChange = (method) => {
@@ -167,28 +175,41 @@ export default function PaymentScreen() {
             
             {/* Products */}
             <div className="payment-products">
-              <div className="payment-product-item">
-                <div className="payment-product-info">
-                  <h4>NBA 2K25</h4>
-                  <p>Microsoft Store</p>
+              {cartItems.length === 0 ? (
+                <div className="payment-product-item">
+                  <div className="payment-product-info">
+                    <h4>No hay productos</h4>
+                    <p>Carrito vacío</p>
+                  </div>
+                  <p className="payment-product-price">$0.00</p>
                 </div>
-                <p className="payment-product-price">$27.95</p>
-              </div>
-              
-              <div className="payment-product-item">
+              ) : (
+                cartItems.map((item) => (
+              <div key={item.id} className="payment-product-item">
+                <img
+                  src={
+                    item.image !== 'default.png'
+                      ? `${import.meta.env.VITE_API_URL || 'http://localhost:3900/api/'}/products/media/${item.image}`
+                      : '/images/default.png'
+                  }
+                  alt={item.productName}
+                  className="payment-product-thumbnail"
+                />
                 <div className="payment-product-info">
-                  <h4>NFS Unbound</h4>
-                  <p>Microsoft Store</p>
+                  <h4>{item.productName}</h4>
+                  <p>{item.platformName} - {item.consoleName}</p>
                 </div>
-                <p className="payment-product-price">$45.00</p>
+                <p className="payment-product-price">${(item.price * item.quantity).toFixed(2)}</p>
               </div>
+            ))
+              )}
             </div>
             
             {/* Total */}
             <div className="payment-total-section">
               <div className="payment-total-row">
                 <p>Subtotal:</p>
-                <p>$72.95</p>
+                <p>${subtotal.toFixed(2)}</p>
               </div>
               
               <div className="payment-total-row">
@@ -198,7 +219,7 @@ export default function PaymentScreen() {
               
               <div className="payment-total-final">
                 <p className="payment-total-final-text">TOTAL</p>
-                <p className="payment-total-final-price">$72.95</p>
+                <p className="payment-total-final-price">${total.toFixed(2)}</p>
               </div>
             </div>
           </div>
