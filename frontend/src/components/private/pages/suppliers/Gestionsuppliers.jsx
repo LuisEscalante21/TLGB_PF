@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Gestionsuppliers.css';
+import './Gestionsuppliers.css'; // Asegúrate de tener un CSS para estilos
 import { LuPlus, LuCheck, LuX, LuPencil, LuTrash2 } from 'react-icons/lu';
 import { Global } from '../../../../helpers/Global';
 import EditSupplierModal from './EditsuppliersModal';
@@ -86,18 +86,16 @@ function Gestionsuppliers() {
   const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [editingSupplier, setEditingSupplier] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   // Cargar proveedores desde backend
-  const fetchSuppliers = async (page = 1) => {
+  const fetchSuppliers = async () => {
     setLoading(true);
     setError(null);
     try {
-      let url = `${Global.url}suppliers/page/${page}`;
+      let url = `${Global.url}suppliers`;
       const response = await fetch(url, {
         headers: { 'Accept': 'application/json' }
       });
@@ -105,9 +103,7 @@ function Gestionsuppliers() {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
       const data = await response.json();
-      setSuppliers(data.suppliers || []);
-      setCurrentPage(data.currentPage || 1);
-      setTotalPages(data.totalPages || 1);
+      setSuppliers(Array.isArray(data.suppliers) ? data.suppliers : Array.isArray(data) ? data : []);
     } catch (err) {
       setError(err.message);
       setSuppliers([]);
@@ -117,11 +113,14 @@ function Gestionsuppliers() {
   };
 
   useEffect(() => {
-    fetchSuppliers(currentPage);
-  }, [currentPage]);
+    fetchSuppliers();
+  }, []);
 
-  const filteredSuppliers = suppliers.filter(supplier =>
-    supplier.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredSuppliers = suppliers.filter(
+    supplier =>
+      supplier &&
+      typeof supplier.name === 'string' &&
+      supplier.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const toggleSupplierSelection = (supplierId) => {
@@ -143,19 +142,28 @@ function Gestionsuppliers() {
 
   const handleSaveNewSupplier = async (formData) => {
     try {
+      // Debug: Log FormData contents before sending
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+  
       const response = await fetch(`${Global.url}registerSuppliers`, {
         method: 'POST',
-        body: formData
+        body: formData // Send the FormData directly
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Error al registrar proveedor');
       }
-
+  
+      const data = await response.json();
+      console.log('Success:', data);
+      
       setIsAddModalOpen(false);
-      fetchSuppliers(currentPage);
+      fetchSuppliers();
     } catch (err) {
+      console.error('Error detallado al registrar el proveedor:', err);
       setError(err.message || 'Error desconocido al registrar proveedor');
     }
   };
@@ -178,7 +186,7 @@ function Gestionsuppliers() {
       }
 
       setIsEditModalOpen(false);
-      fetchSuppliers(currentPage);
+      fetchSuppliers();
     } catch (err) {
       setError(err.message);
     }
@@ -194,16 +202,10 @@ function Gestionsuppliers() {
         throw new Error('Error al eliminar el proveedor');
       }
 
-      fetchSuppliers(currentPage);
+      fetchSuppliers();
       setSelectedSuppliers(prev => prev.filter(id => id !== supplierId));
     } catch (err) {
       setError(err.message);
-    }
-  };
-
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage);
     }
   };
 
@@ -264,28 +266,6 @@ function Gestionsuppliers() {
               </div>
             )}
           </div>
-
-          {totalPages > 1 && (
-            <div className="pagination-controls">
-              <button
-                className="button-after"
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                Anterior
-              </button>
-              <span>
-                Página {currentPage} de {totalPages}
-              </span>
-              <button
-                className="button-next"
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                Siguiente
-              </button>
-            </div>
-          )}
         </>
       )}
 

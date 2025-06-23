@@ -16,13 +16,6 @@ function Navbar() {
         
       </Link>
       <div className="admin-nav-options">
-        <Link 
-          to="pago" 
-          className={`admin-nav-item ${isActive('/admin-dashboard') ? 'active' : ''}`}
-        >
-          
-          <span>Pago</span>
-        </Link>
         
         <Link 
           to="productos" 
@@ -40,15 +33,6 @@ function Navbar() {
           
           <span>Empleados</span>
         </Link>
-        
-        <Link 
-          to="/admin-account" 
-          className={`admin-nav-item ${isActive('/admin-account') ? 'active' : ''}`}
-        >
-          
-          <span>Cuenta</span>
-        </Link>
-
            
         <Link 
           to="Proveedores" 
